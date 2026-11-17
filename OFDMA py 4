@@ -1,0 +1,49 @@
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+# OFDMA parameters
+users = 3
+subcarriers = 12
+symbols = 8
+
+# SNR values
+snr = np.array([3, 7, 15, 31])
+
+# Throughput calculation
+rates = np.log2(1 + snr)
+total_throughput = np.sum(rates)
+
+print("OFDMA Subcarrier Analysis")
+print("Subcarrier Rates:", rates)
+print("Total Throughput:", total_throughput, "bits/s/Hz")
+
+# Resource allocation grid
+allocation = np.zeros((symbols, subcarriers))
+
+for i in range(symbols):
+    for j in range(subcarriers):
+        allocation[i, j] = (i + j) % users
+
+# Graph 1: OFDMA Resource Grid
+plt.figure(figsize=(9, 5))
+plt.imshow(allocation, cmap="viridis", aspect="auto")
+
+plt.colorbar(label="User Allocation")
+plt.xlabel("Subcarrier Index")
+plt.ylabel("OFDM Symbol")
+plt.title("OFDMA Resource Allocation")
+
+plt.tight_layout()
+plt.show()
+
+# Graph 2: Throughput
+plt.figure(figsize=(8, 5))
+plt.bar(["User 1", "User 2", "User 3", "User 4"], rates)
+
+plt.xlabel("Users")
+plt.ylabel("Throughput (bits/s/Hz)")
+plt.title("OFDMA User Throughput")
+plt.grid(axis="y", alpha=0.3)
+plt.tight_layout()
+plt.show()
