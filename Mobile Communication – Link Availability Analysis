@@ -1,0 +1,48 @@
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Number of updates
+N = 1000
+
+# Network availability
+p = np.array([0.90, 0.60, 0.30])
+
+# Calculations
+delivered = N * p
+undelivered = N * (1 - p)
+retry_delay = (1 - p) / p
+
+print("Link Availability Analysis")
+for i in range(len(p)):
+    print(f"\nAvailability: {p[i]*100:.0f}%")
+    print("Delivered:", delivered[i])
+    print("Undelivered:", undelivered[i])
+    print("Retry Delay:", round(retry_delay[i], 3), "minutes")
+
+# Graph 1: Successful and unsuccessful delivery
+plt.figure(figsize=(8, 5))
+x = np.arange(len(p))
+width = 0.35
+
+plt.bar(x - width/2, delivered, width, label="Delivered")
+plt.bar(x + width/2, undelivered, width, label="Undelivered")
+
+plt.xticks(x, ["90%", "60%", "30%"])
+plt.xlabel("Link Availability")
+plt.ylabel("Number of Updates")
+plt.title("Mobile Communication - Data Delivery")
+plt.legend()
+plt.grid(axis="y", alpha=0.3)
+plt.tight_layout()
+plt.show()
+
+# Graph 2: Retry delay
+plt.figure(figsize=(8, 5))
+plt.plot(p * 100, retry_delay, marker="o")
+plt.xlabel("Link Availability (%)")
+plt.ylabel("Retry Delay (Minutes)")
+plt.title("Network Availability vs Retry Delay")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
