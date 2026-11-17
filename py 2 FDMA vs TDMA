@@ -1,0 +1,47 @@
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Given values
+bandwidth = 2000  # kHz
+
+# FDMA
+fdma_channel_width = 25
+fdma_channels = bandwidth / fdma_channel_width
+
+fdma_usable = fdma_channels * (1 - 0.05 - 0.03)
+
+# TDMA
+tdma_carrier_width = 200
+slots_per_carrier = 8
+
+tdma_carriers = bandwidth / tdma_carrier_width
+tdma_slots = tdma_carriers * slots_per_carrier
+
+tdma_usable = tdma_slots * (1 - 0.08 - 0.05)
+
+print("FDMA Channels:", fdma_channels)
+print("FDMA Usable:", fdma_usable)
+
+print("TDMA Slots:", tdma_slots)
+print("TDMA Usable:", tdma_usable)
+
+# Graph
+methods = ["FDMA", "TDMA"]
+nominal = [fdma_channels, tdma_slots]
+usable = [fdma_usable, tdma_usable]
+
+x = np.arange(2)
+width = 0.35
+
+plt.figure(figsize=(8, 5))
+plt.bar(x - width/2, nominal, width, label="Nominal Resources")
+plt.bar(x + width/2, usable, width, label="Usable Resources")
+
+plt.xticks(x, methods)
+plt.ylabel("Number of Channels / Slots")
+plt.title("FDMA vs TDMA Channel Capacity")
+plt.legend()
+plt.grid(axis="y", alpha=0.3)
+plt.tight_layout()
+plt.show()
