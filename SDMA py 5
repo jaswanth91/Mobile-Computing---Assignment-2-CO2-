@@ -1,0 +1,57 @@
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Angle range
+theta = np.linspace(-90, 90, 1000)
+theta_rad = np.radians(theta)
+
+# Antenna configurations
+antenna_sizes = [2, 4, 8]
+
+plt.figure(figsize=(9, 5))
+
+for N in antenna_sizes:
+
+    # Half-wavelength antenna spacing
+    kd = np.pi
+
+    # Uniform linear array factor
+    psi = kd * np.sin(theta_rad)
+
+    denominator = np.sin(psi / 2)
+
+    numerator = np.sin(N * psi / 2)
+
+    with np.errstate(divide='ignore', invalid='ignore'):
+        AF = np.abs(numerator / (N * denominator))
+
+    AF[np.isnan(AF)] = 1
+    AF[np.isinf(AF)] = 1
+
+    AF_db = 20 * np.log10(np.maximum(AF, 1e-5))
+
+    plt.plot(theta, AF_db, label=f"{N} Antennas")
+
+plt.xlabel("Angle (Degrees)")
+plt.ylabel("Normalized Array Gain (dB)")
+plt.title("SDMA - Antenna Array Beam Pattern")
+plt.legend()
+plt.grid(True)
+plt.ylim(-50, 5)
+plt.tight_layout()
+plt.show()
+
+# Angular separation
+angles = [20, 50, 20, 24, -25, 15]
+
+pairs = [(20, 50), (20, 24), (-25, 15)]
+
+print("SDMA Angular Separation")
+
+for a, b in pairs:
+    separation = abs(a - b)
+    result = "Can be separated" if separation > 15 else "Difficult to separate"
+
+    print(a, "and", b,
+          "=", separation, "degrees:", result)
